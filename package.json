@@ -1,0 +1,27 @@
+{
+  "name": "mybot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/bot.js",
+    "dev": "nodemon ./src/bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LongN22/MyBot.git"
+  },
+  "author": "Long",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LongN22/MyBot/issues"
+  },
+  "homepage": "https://github.com/LongN22/MyBot#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "mongoose": "^5.12.10"
+  }
+}
