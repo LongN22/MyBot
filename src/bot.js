@@ -12,17 +12,10 @@ client.on('ready', ()=> {
 });
 
 client.on('message', async msg =>{
-    if(msg.content == 'test'){
-        msg.reply("test");
-        msg.react("❤️");
-    }
-
     if(msg.content.startsWith(PREFIX)){
         const [COMMAND, ...args] = msg.content.trim().substring(1).split(/\s+/);
-        //msg.channel.send(test);
-        //console.log(arges);
 
-        if(COMMAND == "weather"){
+        if(COMMAND == "weather"){ 
             let getWeather = async () => {
                 if(!args[0]){
                     msg.reply("please put city");
@@ -35,12 +28,34 @@ client.on('message', async msg =>{
                 }
 
                 let response = await axios.get("http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + (process.env.WEATHER_API));
-                let temp = response.data;
-                return temp;
+                return response.data;
             }
+
             const res = await getWeather();
             console.log(res);
-            msg.reply(Math.round((res.main.temp - 273.15) * 9/5 + 32) + "°F");
+
+            function convertKToC(temp){
+                return temp - 273.15;
+            }
+
+            function convertKToF(temp){
+                return (temp - 273.15) * 9/5 + 32;
+            }
+
+            const test = new discord.MessageEmbed()
+                .setColor('#3498DB')
+                .setAuthor(cityName.toUpperCase())
+                .setTitle('Temperature')
+                .setDescription(Math.round(convertKToF(res.main.temp)) + "°F / " + Math.round(convertKToC(res.main.temp)) + "°C")
+                //.addField('\u200b', '\u200b')
+                .addField('Feels Like', Math.round(convertKToF(res.main.temp)) + "°F / " + Math.round(convertKToC(res.main.temp)) + "°C")
+                .setThumbnail('http://openweathermap.org/img/wn/' + res.weather[0].icon + '@2x.png')
+                .addField('High', Math.round(convertKToF(res.main.temp_max)) + "°F / " + Math.round(convertKToC(res.main.temp_max)) + "°C" , true)
+                .addField('Low', Math.round(convertKToF(res.main.temp_min)) + "°F / " + Math.round(convertKToC(res.main.temp_min)) + "°C" , true)
+                .addField('Wind', Math.round(res.wind.speed * 2.237) + " mph", true);
+
+            msg.reply(test);
+
         }
     }
     
